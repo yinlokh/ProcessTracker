@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">ProcessTracker</string>
+    <string name="all_processes_label">all processes</string>
+</resources>
