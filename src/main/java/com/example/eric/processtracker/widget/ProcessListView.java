@@ -139,6 +139,10 @@ public class ProcessListView extends FrameLayout {
 
     private ArrayList<ProcessEntry> filterResults() {
         ArrayList<ProcessEntry> filtered = new ArrayList<ProcessEntry>();
+        if (mProcessList == null) {
+            return filtered;
+        }
+
         for (ProcessEntry processEntry : mProcessList) {
             if (processEntry.name.contains(mSearchBox.getText())) {
                 filtered.add(processEntry);
