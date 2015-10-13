@@ -4,12 +4,20 @@
     android:id="@+id/frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ff000000">
+    android:background="#ff000000"
+    >
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler"
+    <com.example.eric.processtracker.widget.ProcessListView
+        android:id="@+id/process_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ff000000"/>
+        />
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:src="@drawable/spinner"
+        />
 
 </com.example.eric.processtracker.widget.InteractionFrameLayout>

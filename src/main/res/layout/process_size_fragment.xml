@@ -2,9 +2,13 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <com.example.eric.processtracker.VSizeGraphView
+    android:layout_height="match_parent"
+    >
+
+    <com.example.eric.processtracker.widget.VSizeGraphView
         android:id="@+id/vsize_graph"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        />
+
 </FrameLayout>

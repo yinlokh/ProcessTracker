@@ -3,7 +3,6 @@ package com.example.eric.processtracker;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -13,14 +12,17 @@ import com.example.eric.processtracker.service.ProcessListBackgroundService;
 public class MainActivity extends FragmentActivity {
 
     private TextView mTitle;
+    private TextView mSizeText;
     private ProcListFragment mProcListFragment;
     private Intent mBackgroundServiceIntent;
+    private ProcessSizeFragment.Listener mProcessSizeChangeListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mTitle = (TextView) findViewById(R.id.title);
+        mSizeText = (TextView) findViewById(R.id.size);
 
         mBackgroundServiceIntent = new Intent(this, ProcessListBackgroundService.class);
         Button stopServiceButton = (Button) findViewById(R.id.exit_button);
@@ -32,6 +34,19 @@ public class MainActivity extends FragmentActivity {
                         finish();
                     }
                 });
+
+        mProcessSizeChangeListener = new ProcessSizeFragment.Listener() {
+            @Override
+            public void onSizeUpdate(int size) {
+                mSizeText.setText(Integer.toString(size));
+            }};
+
+        ProcessSizeFragment processSizeFragment =
+                (ProcessSizeFragment) getSupportFragmentManager().findFragmentByTag(
+                        ProcessSizeFragment.FRAGMENT_TAG);
+        if (processSizeFragment != null) {
+            processSizeFragment.setListener(mProcessSizeChangeListener);
+        }
 
         mProcListFragment = (ProcListFragment) getSupportFragmentManager().findFragmentByTag(
                         ProcListFragment.FRAGMENT_TAG);
@@ -51,15 +66,11 @@ public class MainActivity extends FragmentActivity {
                             return;
                         }
 
+                        String parts[] = name.split("[\\/\\.]");
+                        mTitle.setText(parts[parts.length - 1]);
+
                         ProcessSizeFragment fragment = ProcessSizeFragment.newInstance(pid, name);
-                        fragment.setListener(
-                                new ProcessSizeFragment.Listener() {
-                                    @Override
-                                    public void onSizeUpdate(int size) {
-                                        Log.e("yinlokh", "size update");
-                                        mTitle.setText(name + " " + size);
-                                    }
-                                });
+                        fragment.setListener(mProcessSizeChangeListener);
                         getSupportFragmentManager().beginTransaction()
                                 .addToBackStack(ProcListFragment.FRAGMENT_TAG)
                                 .setCustomAnimations(
@@ -77,6 +88,7 @@ public class MainActivity extends FragmentActivity {
                     @Override
                     public void onResume() {
                         mTitle.setText(getText(R.string.all_processes_label));
+                        mSizeText.setText(null);
                     }
                 });
     }

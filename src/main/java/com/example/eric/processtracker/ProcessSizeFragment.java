@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.example.eric.processtracker.model.VSizeEntry;
 import com.example.eric.processtracker.service.ResponseBroadcastReceiver;
 import com.example.eric.processtracker.service.VSizeFetchAsyncTask;
+import com.example.eric.processtracker.widget.VSizeGraphView;
 
 import java.util.ArrayList;
 
@@ -83,7 +84,7 @@ public class ProcessSizeFragment extends Fragment {
         });
 
         VSizeFetchAsyncTask asyncTask = new VSizeFetchAsyncTask(
-                getContext(),
+                getContext().getApplicationContext(),
                 new VSizeFetchAsyncTask.Callback() {
                     @Override
                     public void onResult(ArrayList<VSizeEntry> sizes) {

@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="highlight_text_color">#ff00ffff</color>
     <color name="text_color">#ff00aaff</color>
+    <color name="dull_text_color">#ff004488</color>
     <color name="highlight_color">#ff0066cc</color>
     <color name="graph_background_color">#ff000000</color>
     <color name="graph_grid_color">#ff222222</color>
     <color name="graph_major_grid_color">#ff444444</color>
     <color name="graph_line_color">#ff00aaff</color>
     <color name="graph_marker_color">#ff003366</color>
+    <color name="graph_datapoint_color">#ffaaaaaa</color>
 </resources>

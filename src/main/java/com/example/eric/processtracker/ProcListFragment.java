@@ -5,22 +5,20 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.eric.processtracker.model.ProcessEntry;
 import com.example.eric.processtracker.service.ResponseBroadcastReceiver;
 import com.example.eric.processtracker.widget.InteractionFrameLayout;
+import com.example.eric.processtracker.widget.ProcessListView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * Fragment (red one)
+ * Fragment to show a list of processes
  */
 public class ProcListFragment extends Fragment {
 
@@ -28,10 +26,8 @@ public class ProcListFragment extends Fragment {
 
     private View mView;
     private InteractionFrameLayout mInteractionFrameLayout;
+    private ProcessListView mProcessListView;
     private ResponseBroadcastReceiver mBroadcastReceiver;
-    private RecyclerView mProcessListRecycler;
-    private ProcessListAdapter mProcessListAdapter = new ProcessListAdapter();
-    private ArrayList<ProcessEntry> mProcessList;
     private Listener mListener;
 
     public interface Listener {
@@ -46,8 +42,7 @@ public class ProcListFragment extends Fragment {
 
     public void setProcessList(ArrayList<ProcessEntry> processEntries) {
         Collections.sort(processEntries);
-        mProcessList = processEntries;
-        mProcessListAdapter.notifyDataSetChanged();
+        mProcessListView.setProcessList(processEntries);
     }
 
     @Override
@@ -73,9 +68,16 @@ public class ProcListFragment extends Fragment {
         if (mView == null) {
             mView = inflater.inflate(R.layout.process_list_fragment, container, false);
             mInteractionFrameLayout = (InteractionFrameLayout) mView.findViewById(R.id.frame);
-            mProcessListRecycler = (RecyclerView) mView.findViewById(R.id.recycler);
-            mProcessListRecycler.setAdapter(mProcessListAdapter);
-            mProcessListRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+            mProcessListView = (ProcessListView) mView.findViewById(R.id.process_list);
+            mProcessListView.setListener(
+                    new ProcessListView.Listener() {
+                        @Override
+                        public void onProcessSelected(ProcessEntry processEntry) {
+                            if (mListener != null) {
+                                mListener.onProcessSelected(processEntry.pid, processEntry.name);
+                            }
+                        }
+                    });
         }
         return mView;
     }
@@ -99,52 +101,5 @@ public class ProcListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-    }
-
-    // Adapter for recycler we are showing
-    private class ProcessListAdapter extends RecyclerView.Adapter<ProcessEntryVH> {
-
-        @Override
-        public ProcessEntryVH onCreateViewHolder(ViewGroup viewGroup, int i) {
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            View view = inflater.inflate(R.layout.process_list_item, viewGroup, false);
-            return new ProcessEntryVH(view);
-        }
-
-        @Override
-        public void onBindViewHolder(ProcessEntryVH holder, int i) {
-            ProcessEntry processEntry = mProcessList.get(i);
-            final int pid = processEntry.pid;
-            final String name = processEntry.name;
-            holder.name.setText(processEntry.name);
-            holder.vsize.setText(Integer.toString(processEntry.vsize));
-            holder.itemView.setOnClickListener(
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (mListener == null) {
-                                return ;
-                            }
-                            mListener.onProcessSelected(pid, name);
-                        }
-                    });
-        }
-
-        @Override
-        public int getItemCount() {
-            return mProcessList != null ? mProcessList.size() : 0;
-        }
-    }
-
-    // ViewHolder for process entry item
-    private static class ProcessEntryVH extends RecyclerView.ViewHolder {
-
-        public final TextView name;
-        public final TextView vsize;
-        public ProcessEntryVH(View itemView) {
-            super(itemView);
-            name = (TextView)itemView.findViewById(R.id.process_name);
-            vsize = (TextView)itemView.findViewById(R.id.vsize);
-        }
     }
 }
