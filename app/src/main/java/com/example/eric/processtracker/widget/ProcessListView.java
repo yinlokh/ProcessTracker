@@ -75,6 +75,8 @@ public class ProcessListView extends FrameLayout {
         mProcessListRecycler = (RecyclerView) view.findViewById(R.id.recycler);
         mProcessListRecycler.setAdapter(mProcessListAdapter);
         mProcessListRecycler.setLayoutManager(mLinearLayoutManager);
+
+        // Quick Return interactions
         mProcessListRecycler.setOnScrollListener(
                 new OnScrollListener() {
 

@@ -18,10 +18,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
-        <provider
-            android:authorities="com.example.eric.processtracker"
-            android:name=".database.ProcessListContentProvider" />
     </application>
 
 </manifest>

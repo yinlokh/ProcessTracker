@@ -6,7 +6,6 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.util.Log;
 
 /**
  * ContentProvider for {@link ProcessListOpenHelper}
@@ -32,7 +31,6 @@ public class ProcessListContentProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        Log.e("yinlokh", "received query");
         SQLiteDatabase db = mProcessListOpenHelper.getReadableDatabase();
         Cursor c = db.query(ProcessListOpenHelper.TABLE_PROCESSES, projection, selection, selectionArgs, null, null, sortOrder);
         return c;
@@ -40,7 +38,6 @@ public class ProcessListContentProvider extends ContentProvider {
 
     @Override
     public String getType(Uri uri) {
-        Log.e("yinlokh", "received gettype");
         if (sUriMatcher.match(uri) == CODE_PROCESS_LIST) {
             return "PROCESS_LIST";
         }

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,7 +11,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +18,6 @@ import android.view.ViewGroup;
 import com.example.eric.processtracker.database.ProcessListOpenHelper;
 import com.example.eric.processtracker.model.VSizeEntry;
 import com.example.eric.processtracker.service.ResponseBroadcastReceiver;
-import com.example.eric.processtracker.service.VSizeFetchAsyncTask;
 import com.example.eric.processtracker.widget.VSizeGraphView;
 
 import java.util.ArrayList;
@@ -95,7 +92,6 @@ public class ProcessSizeFragment extends Fragment {
         });
 
         initializeWithCursorLoader();
-//        initializeWIthAsyncTask();
         return mView;
     }
 
@@ -119,19 +115,6 @@ public class ProcessSizeFragment extends Fragment {
 
     public void setListener(Listener listener) {
         mListener = listener;
-    }
-
-    private void initializeWIthAsyncTask() {
-        VSizeFetchAsyncTask asyncTask = new VSizeFetchAsyncTask(
-                getContext().getApplicationContext(),
-                new VSizeFetchAsyncTask.Callback() {
-                    @Override
-                    public void onResult(ArrayList<VSizeEntry> sizes) {
-                        mVSizeGraphView.setVSizes(sizes);
-                        mHasInitialData = true;
-                    }
-                });
-        asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mPid);
     }
 
     private void initializeWithCursorLoader() {
